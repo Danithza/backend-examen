@@ -14,7 +14,20 @@ export default class Especialista extends BaseModel {
   @column()
   declare registro_profesional: string
 
-  @column()
+  @column({
+    serialize: (value) => {
+      if (typeof value === 'string') {
+        try { return JSON.parse(value) } catch { return value }
+      }
+      return value
+    },
+    prepare: (value) => {
+      if (typeof value === 'object') {
+        return JSON.stringify(value)
+      }
+      return value
+    },
+  })
   declare dias_horarios: any
 
   @column()
